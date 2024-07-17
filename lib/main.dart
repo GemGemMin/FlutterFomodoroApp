@@ -12,43 +12,93 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  int counter = 0;
+  bool showTitle = true;
 
-  void onClicked() {
+  void toggleTitle() {
     setState(() {
-      counter++;
+      showTitle = !showTitle;
     });
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('initState');
+  }
+
+  @override
+  void dispose() {
+    // 위젯이 스크린에서 제거될 때 호출되는 메소드
+    // TODO: implement dispose
+    super.dispose();
+    print('dispose');
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print('build');
     return MaterialApp(
+      theme: ThemeData(
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(
+            color: Colors.red,
+          ),
+        ),
+      ),
       home: Scaffold(
         backgroundColor: const Color(0xFFF4EDDB),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Click Count',
-                style: TextStyle(
-                  fontSize: 30,
-                ),
-              ),
-              Text(
-                '$counter',
-                style: const TextStyle(
-                  fontSize: 30,
-                ),
-              ),
+              showTitle ? const MyLargeTitle() : const Text('nothing'),
               IconButton(
-                iconSize: 40,
-                onPressed: onClicked,
-                icon: const Icon(Icons.add_box_rounded),
-              ),
+                  onPressed: toggleTitle,
+                  icon: const Icon(Icons.remove_red_eye))
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class MyLargeTitle extends StatefulWidget {
+  const MyLargeTitle({
+    super.key,
+  });
+
+  @override
+  State<MyLargeTitle> createState() => _MyLargeTitleState();
+}
+
+class _MyLargeTitleState extends State<MyLargeTitle> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('initState');
+  }
+
+  @override
+  void dispose() {
+    // 위젯이 스크린에서 제거될 때 호출되는 메소드
+    // TODO: implement dispose
+    super.dispose();
+    print('dispose');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'My Large Title',
+      style: TextStyle(
+        fontSize: 30,
+        color: Theme.of(context) // Theme으로 접근하며 상위 요소의 데이터에 접근할 수 있다.
+            .textTheme
+            .titleLarge! // !를 사용하면 null값이 아니라는 것을 확신하는 것, ?를 사용하면 null값일 수도 있다는 것.
+            .color,
       ),
     );
   }
